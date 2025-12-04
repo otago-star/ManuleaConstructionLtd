@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us - Manulea Construction Ltd</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #031933;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background-color: #031933;
+        }
+
+        nav {
+            position: relative;
+            z-index: 2;
+            background-color: rgba(3, 25, 51, 0.8);
+            padding: 20px;
+            text-align: center;
+        }
+
+        nav a {
+            all: unset;
+            cursor: pointer;
+            margin: 0 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #e6e6e6;
+            transition: all 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #07ff07;
+            text-shadow: 0 0 10px #07ff07;
+            font-size: 20px;
+        }
+
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 60px 20px;
+            color: #e6e6e6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 50px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            text-shadow: 4px 4px 8px rgba(27, 190, 35, 0.6);
+            transition: all 0.3s ease;
+        }
+
+        h1:hover {
+            font-size: 60px;
+            text-shadow: 6px 6px 12px rgba(27, 255, 35, 0.9);
+            color: #ffffff;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #e6e6e6;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: #ccc;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #07ff07;
+            color: #031933;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0aff0a;
+            box-shadow: 0 0 10px #07ff07;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <nav>
+        <a href="Homepage.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html">Services</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="reviews.html">Reviews</a>
+    </nav>
+
+    <div class="content">
+        <h1>Contact Us</h1>
+
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea rows="5" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+            <p><strong>Manulea Construction Ltd</strong></p>
+            <p>104 Glen Rd, Dunedin, NZ</p>
+            <p>Email: manuleacon@gmail.com</p>
+            <p>Phone: +64 22 415 8756</p>
+        </div>
+
+        <div class="map-container" style="margin-top: 40px;">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2777.0562387573373!2d170.4877237!3d-45.8901883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa82ea9554c5a9465%3A0xe8c57f5be4fe7ad4!2s104%20Glen%20Road%2C%20The%20Glen%2C%20Dunedin%209011!5e0!3m2!1sen!2snz!4v1758018147604!5m2!1sen!2snz" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const stars = [];
+        const numStars = 150;
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.01
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let star of stars) {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) star.speed *= -1;
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+            }
+            requestAnimationFrame(drawStars);
+        }
+
+        drawStars();
+    </script>
+</body>
+</html>

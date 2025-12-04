@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About Us - Manulea Construction Ltd</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav>
+        <a href="Homepage.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html">Services</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="reviews.html">Reviews</a>
+    </nav>
+
+    
+    <form id="reviewForm">
+        <label for="name">Name:</label><br>
+        <input type="text" name="name" required><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" name="email" required><br>
+
+        <label for="review">Review:</label><br>
+        <textarea name="review" required></textarea><br>
+
+        <button type="submit">Submit Review</button>
+    </form>
+
+    <div class="reviews-section">
+        <h2>Customer Reviews</h2>
+        <div id="reviewsContainer"></div>
+    </div>
+
+
+    <script>
+        const form = document.getElementById('reviewForm');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+            const url = 'https://script.google.com/macros/s/AKfycbyVTYK1Zknp0RlKKU0kBQ2H8Ngq2xhrt5qwDoGRyo3PHnKoPCBT3CLrfBRI-Oa9EYkjiw/exec'; // Replace with your actual Apps Script URL
+
+            fetch(url, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert(data);
+                form.reset();
+                loadReviews(); // ✅ Refresh reviews immediately after submission
+            })
+            .catch(error => {
+                alert('Error submitting review');
+                console.error(error);
+            });
+        });
+    </script>
+
+    <script>
+        function loadReviews() {
+            const sheetUrl = 'https://opensheet.elk.sh/1UeMsAbpyxrhSl8CTBZCYZnGTmLtJbP2fYSexiF-RJXY/sheet1';
+            fetch(sheetUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('reviewsContainer');
+                    container.innerHTML = '';
+
+                    data.forEach(entry => {
+                        const div = document.createElement('div');
+                        div.className = 'review';
+                        div.innerHTML = `<h3>${entry.Name}</h3><p>${entry.Review}</p>`;
+                        container.appendChild(div);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading reviews:', error);
+                });
+        }
+
+        window.onload = loadReviews;
+        setInterval(loadReviews, 10000); // Refresh every 10 seconds
+    </script>
+
+
+</body>
+</html>

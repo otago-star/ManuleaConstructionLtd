@@ -1,0 +1,136 @@
+/* styles-gallery.css */
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #C10000;
+    font-family: 'Arial', sans-serif;
+    overflow-x: hidden;
+}
+
+#starfield {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background-color: #031933;
+}
+
+nav {
+    position: relative;
+    z-index: 2;
+    background-color: rgba(3, 25, 51, 0.8);
+    padding: 20px;
+    text-align: center;
+}
+
+nav a {
+    all: unset;
+    cursor: pointer;
+    margin: 0 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #e6e6e6;
+    transition: all 0.3s ease;
+}
+
+nav a:hover {
+    color: #07ff07;
+    text-shadow: 0 0 10px #07ff07;
+    font-size: 20px;
+}
+
+.content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 60px 20px;
+    color: #e6e6e6;
+}
+
+h1 {
+    font-size: 50px;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    text-shadow: 4px 4px 8px rgba(27, 190, 35, 0.6);
+    transition: all 0.3s ease;
+}
+
+h1:hover {
+    font-size: 60px;
+    text-shadow: 6px 6px 12px rgba(27, 255, 35, 0.9);
+    color: #ffffff;
+}
+/* Ask Mum about this */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.gallery-item {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 2px solid #07ff07;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4; /* Forces vertical shape */
+    object-fit: cover;
+    display: block;
+    border-radius: 10px;
+}
+
+
+.gallery-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #07ff07;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+nav a {
+    padding: 12px 24px; /* Add padding for easier tap targets */
+    font-size: 20px;     /* Slightly larger text */
+    display: inline-block;
+    margin: 0 10px;      /* Space between links */
+}
+
+nav {
+    padding: 30px 20px;
+}
+
+@media (max-width: 768px) {
+    nav a {
+        display: block;
+        margin: 10px 0;
+        font-size: 22px;
+    }
+
+    .content {
+        padding: 60px 10px;
+    }
+
+    .contact-form {
+        width: 90%;
+        padding: 20px;
+    }
+
+    iframe {
+        width: 100%;
+        height: 300px;
+    }
+}

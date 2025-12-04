@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manulea Construction Ltd</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('666.png');
+            background-repeat: no-repeat;
+
+            background-position-x: center;
+            background-position-y: center;
+            background-size: cover;
+            min-height: 100vh;
+            position: relative;
+        }
+        .grid-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            grid-template-rows: repeat(6, 1fr);
+            z-index: 10;
+            pointer-events: none;
+        }
+        .grid-cell {
+            pointer-events: auto;
+            border: 1px solid rgba(255, 255, 255, 0.214);
+            position: relative;
+            user-select: none;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        .zoom-effect {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 20;
+            pointer-events: none;
+            background-image: url('666.png');
+            background-repeat: no-repeat;
+            background-size: 120vw 120vh;
+            transition: transform 0.3s;
+            border-radius: 50%;
+            box-shadow: 0 0 20px 10px rgba(0,0,0,0.2);
+            transform: scale(1.);
+        }
+        .matrix-canvas {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 30;
+            pointer-events: none;
+        }
+        .water-drop {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 60%; height: 60%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 60% 40%, rgba(255,255,255,0.3) 0%, rgba(0,0,0,0.1) 80%, transparent 100%);
+            z-index: 40;
+            pointer-events: none;
+            animation: drop 0.5s;
+        }
+        @keyframes drop {
+            0% { transform: translate(-50%, -50%) scale(0.7);}
+            70% { transform: translate(-50%, -50%) scale(1.2);}
+            100% { transform: translate(-50%, -50%) scale(1);}
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-overlay"></div>
+    <script>
+        const gridOverlay = document.querySelector('.grid-overlay');
+        const cols = 6, rows = 6;
+        for(let i=0; i<cols*rows; i++) {
+            const cell = document.createElement('div');
+            cell.className = 'grid-cell';
+            // Calculate background position for zoom effect
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            cell.dataset.col = col;
+            cell.dataset.row = row;
+
+            cell.addEventListener('mouseenter', function(e) {
+                // Generate a color based on cell position
+                const hue = (col * 360 / cols + row * 360 / rows) % 360;
+                document.body.style.backgroundColor = `hsla(${hue}, 70%, 60%, 0.2)`;
+                // Zoom effect
+                const zoom = document.createElement('div');
+                zoom.className = 'zoom-effect';
+                // Calculate background position for zoom
+                zoom.style.backgroundPosition = 
+                    `${-col * 100 / (cols-1)}vw ${-row * 100 / (rows-1)}vh`;
+                cell.appendChild(zoom);
+
+                // Matrix effect
+                const canvas = document.createElement('canvas');
+                canvas.className = 'matrix-canvas';
+                canvas.width = cell.offsetWidth;
+                canvas.height = cell.offsetHeight;
+                cell.appendChild(canvas);
+                startMatrix(canvas);
+
+                // Water drop
+                const drop = document.createElement('div');
+                drop.className = 'water-drop';
+                cell.appendChild(drop);
+            });
+
+            cell.addEventListener('mouseleave', function() {
+                cell.querySelectorAll('.zoom-effect, .matrix-canvas, .water-drop').forEach(el => el.remove());
+                cell.style.backgroundColor = ''; // Reset color
+                document.body.style.backgroundColor = '';
+            });
+
+            cell.addEventListener('click', function() {
+                window.location.href = 'Homepage.html'; // Change to your landing page
+            });
+
+            gridOverlay.appendChild(cell);
+        }
+
+        // Matrix effect function
+        function startMatrix(canvas) {
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const cols = Math.floor(w / 12);
+            const drops = Array(cols).fill(1);
+            const chars = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let animationId;
+
+            function draw() {
+                ctx.fillStyle = 'rgba(255,255,255,0.09)';
+                ctx.fillRect(0, 0, w, h);
+                ctx.font = 'bold 14px monospace';
+                ctx.fillStyle = '#0F0';
+                for(let i=0; i<cols; i++) {
+                    const text = chars[Math.floor(Math.random()*chars.length)];
+                    ctx.fillText(text, i*12, drops[i]*14);
+                    if(drops[i]*14 > h && Math.random() > 0.975) drops[i]=0;
+                    drops[i]++;
+                }
+                animationId = requestAnimationFrame(draw);
+            }
+            draw();
+            canvas._matrixAnim = animationId;
+            canvas._matrixStop = () => cancelAnimationFrame(animationId);
+        }
+
+        // Stop animation on remove
+        const observer = new MutationObserver(mutations => {
+            mutations.forEach(m => {
+                m.removedNodes.forEach(node => {
+                    if(node.classList && node.classList.contains('matrix-canvas') && node._matrixStop) {
+                        node._matrixStop();
+                    }
+                });
+            });
+        });
+        observer.observe(gridOverlay, { childList: true, subtree: true });
+    </script>
+</body>
+</html>

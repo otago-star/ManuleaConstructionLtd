@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Manulea Construction Ltd - Home</title>
+    <!-- <stylesheet href="styles.css" rel="stylesheet"> -->
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <nav>
+        <a href="Homepage.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="services.html">Services</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="reviews.html">Reviews</a>
+    </nav>
+
+    <div class="content">
+        <h1>Welcome to Manulea Construction Ltd</h1>
+        <br>
+        <p>Your trusted partner in construction and renovation services. We specialize in residential and commercial projects</p>
+        <img src="41841814-f32d-4e0b-9e3f-6d6c65d369eb.jpg" />
+
+        <div class="contact-form">
+            <h2>Quick Contact</h2>
+
+            <div class="email-link" style="margin-bottom: 20px; text-align: center;">
+                <a href="mailto:manuleacon@gmail.com"
+                    style="color: #3ff707; font-weight: bold; text-decoration: none; font-size: 18px; text-shadow: 0 0 8px #e6ff04;">
+                    📧 Email us directly: manuleacon@gmail.com
+                </a>
+            </div>
+        
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2025 Manulea Construction Ltd. All rights reserved.</p>
+                <p><a href="mailto:manuleacon@gmail.com">📧 manuleacon@gmail.com</a></p>
+                <p>📍 104 Glen Road, The Glen, Dunedin 9011</p>
+                <p class="whakatauki">"Mā te huruhuru ka rere te manu" — Adorn the bird with feathers so it may fly.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const stars = [];
+        const numStars = 150;
+
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 1.5 + 0.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.01
+            });
+        }
+
+        function drawStars() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let star of stars) {
+                star.alpha += star.speed;
+                if (star.alpha > 1 || star.alpha < 0) star.speed *= -1;
+
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+                ctx.fill();
+            }
+            requestAnimationFrame(drawStars);
+        }
+
+        drawStars();
+    </script>
+    <script>
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>
